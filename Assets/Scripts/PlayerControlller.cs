@@ -6,12 +6,13 @@ public class PlayerControlller : MonoBehaviour
 {
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private float _walkSpeed = 5f;
-    [SerializeField] private float _jumpSpeed = 5f;
+    [SerializeField] private float _jumpVelocity = 3f;
 
 
     private float _moveHorizontal;
     private float _moveVertical;
     private bool _isJumping;
+    private float _velocity;
 
     void Awake()
     {
@@ -22,6 +23,7 @@ public class PlayerControlller : MonoBehaviour
     void Update()
     {
         GetInput();
+        Gravity();
         Move();
     }
 
@@ -35,11 +37,28 @@ public class PlayerControlller : MonoBehaviour
     private void Move()
     {
         Vector3 move = new Vector3(_moveHorizontal, 0, _moveVertical) * _walkSpeed;
-        if (_isJumping)
-            move.y = _jumpSpeed * Time.deltaTime;
-        else
-            move.y = 0;
+        move.y = _velocity;
 
         _characterController.Move(move * Time.deltaTime);
+    }
+
+    private void Gravity()
+    {
+        if (_characterController.isGrounded)
+        {
+            if (_isJumping)
+            {
+                _velocity = _jumpVelocity;
+                Debug.Log("Jump!");
+            }
+            else
+            {
+                _velocity = -0.1f;
+            }
+        }
+        else
+        {
+            _velocity -= 9.82f * Time.deltaTime;
+        }
     }
 }
