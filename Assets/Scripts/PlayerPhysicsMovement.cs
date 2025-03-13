@@ -29,6 +29,14 @@ public class PlayerPhysicsMovement : MonoBehaviour
         Move();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ramp"))
+        {
+            _rigidBody.AddForce(collision.contacts[0].normal * _jumpVelocity * 2, ForceMode.Impulse);
+        }
+    }
+
     private void GetInput()
     {
         _moveHorizontal = Input.GetAxis("Horizontal");
