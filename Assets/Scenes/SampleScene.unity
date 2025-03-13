@@ -683,6 +683,7 @@ GameObject:
   - component: {fileID: 1285754324}
   - component: {fileID: 1285754323}
   - component: {fileID: 1285754326}
+  - component: {fileID: 1285754328}
   - component: {fileID: 1285754327}
   m_Layer: 0
   m_Name: Player
@@ -750,7 +751,7 @@ Transform:
   m_GameObject: {fileID: 1285754320}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.910653, y: 1.4, z: -2.45}
+  m_LocalPosition: {x: -1.910653, y: 1.97, z: -2.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -796,7 +797,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 1285754326}
   _walkSpeed: 5
-  _jumpSpeed: 5
+  _jumpVelocity: 3
+--- !u!54 &1285754328
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285754320}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1499169459
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,7 +845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1499169460
 MonoBehaviour:
   m_ObjectHideFlags: 0
