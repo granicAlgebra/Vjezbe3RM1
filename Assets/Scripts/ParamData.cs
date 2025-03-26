@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System;
@@ -15,6 +13,7 @@ public class ParamData
     public void SetValue(int value)
     {
         Value = Mathf.Clamp(value, MinMax.x, MinMax.y);
+        OnValueChange?.Invoke(value);
     }
 }
 

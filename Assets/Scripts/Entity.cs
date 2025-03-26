@@ -6,7 +6,7 @@ public class Entity : MonoBehaviour
 {
     public List<ParamData> Params = new List<ParamData>();
 
-    private ParamData GetParam(Param param)
+    public ParamData GetParam(Param param)
     {
         foreach ( var p in Params)
         {
