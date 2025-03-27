@@ -7,12 +7,14 @@ public class PlayerControlller : MonoBehaviour
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private float _walkSpeed = 5f;
     [SerializeField] private float _jumpVelocity = 3f;
-
+    [SerializeField] private LayerMask _layerMaskJump;
 
     private float _moveHorizontal;
     private float _moveVertical;
     private bool _isJumping;
     private float _velocity;
+
+    private RaycastHit[] _hitResults = new RaycastHit[5];
 
     void Awake()
     {
@@ -52,7 +54,7 @@ public class PlayerControlller : MonoBehaviour
 
     private void Gravity()
     {
-        if (_characterController.isGrounded)
+        if (Physics.RaycastNonAlloc(transform.position, -Vector3.up, _hitResults, 1.15f, _layerMaskJump) > 0)
         {
             if (_isJumping)
             {
