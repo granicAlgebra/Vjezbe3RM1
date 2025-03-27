@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+    public GameObject CoinObject;
+    public BoxCollider BoxCollider;
+
+    public AudioSource AudioSource;
+
+    public ParticleSystem VFX;
+
     public Param _param = Param.Gold;
     public int _change = 1;
 
@@ -13,7 +20,11 @@ public class Coin : MonoBehaviour
         if (entity != null)
         {
             entity.ChangeParam(_param, _change);
-            gameObject.SetActive(false);
+            CoinObject.SetActive(false);
+            BoxCollider.enabled = false;
+
+            VFX.Play();
+            AudioSource.Play();
         }
     }
 }
