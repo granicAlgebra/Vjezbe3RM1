@@ -5,20 +5,30 @@ using UnityEngine;
 public class PlayerControlller : MonoBehaviour
 {
     [SerializeField] private CharacterController _characterController;
-    [SerializeField] private float _walkSpeed = 5f;
+    [SerializeField] private AnimationController _animationController;
+    [SerializeField] private float _walkSpeed = 1.5f;
+    [SerializeField] private float _runSpeed = 4f;
+    [SerializeField] private float _sprintSpeed = 6f;
+    [SerializeField] private float _mouseSensitivity = 10;
     [SerializeField] private float _jumpVelocity = 3f;
     [SerializeField] private LayerMask _layerMaskJump;
 
     private float _moveHorizontal;
     private float _moveVertical;
     private bool _isJumping;
+    private bool _isWalking;
+    private bool _isSprinting;
     private float _velocity;
+    private float _mouseHorizontal;
+    private bool _groundCheck;
 
     private RaycastHit[] _hitResults = new RaycastHit[5];
 
     void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _animationController = GetComponent<AnimationController>();
+        _groundCheck = true;
     }
 
     // Update is called once per frame
@@ -42,24 +52,50 @@ public class PlayerControlller : MonoBehaviour
         _moveHorizontal = Input.GetAxis("Horizontal");
         _moveVertical = Input.GetAxis("Vertical");
         _isJumping = Input.GetKeyDown(KeyCode.Space);
+        _isWalking = Input.GetKey(KeyCode.LeftAlt);
+        _isSprinting = Input.GetKey(KeyCode.LeftShift);
+        _mouseHorizontal = Input.GetAxis("Mouse X");
     }
 
     private void Move()
     {
-        Vector3 move = new Vector3(_moveHorizontal, 0, _moveVertical) * _walkSpeed;
-        move.y = _velocity;
+        float speed = _runSpeed;
 
+        if (_isWalking)
+        {
+            speed = _walkSpeed;
+        }
+        else if (_isSprinting)
+        {
+            speed = _sprintSpeed;
+        }
+
+        transform.Rotate(0, _mouseHorizontal * Time.deltaTime * _mouseSensitivity, 0);
+        Vector3 move = (transform.forward * _moveVertical + transform.right * _moveHorizontal) * speed;
+
+        _animationController.Move(move.magnitude);
+
+        move.y = _velocity;
         _characterController.Move(move * Time.deltaTime);
     }
 
     private void Gravity()
     {
-        if (Physics.RaycastNonAlloc(transform.position, -Vector3.up, _hitResults, 1.15f, _layerMaskJump) > 0)
+        if (!_groundCheck)
+        {
+            return;
+        }
+
+        bool isOnGround = Physics.SphereCastNonAlloc(transform.position, 0.2f, -Vector3.up, _hitResults, 0.85f, _layerMaskJump) > 0;
+
+        if (isOnGround)
         {
             if (_isJumping)
             {
                 _velocity = _jumpVelocity;
+                _animationController.Jump();
                 Debug.Log("Jump!");
+                StartCoroutine(IgnoreGroundCheck());
             }
             else
             {
@@ -70,5 +106,15 @@ public class PlayerControlller : MonoBehaviour
         {
             _velocity -= 9.82f * Time.deltaTime;
         }
+
+        _animationController.Falling(isOnGround);
+    }
+
+    private IEnumerator IgnoreGroundCheck()
+    {
+        _groundCheck = false;
+        yield return new WaitForSeconds(0.3f);
+        _groundCheck = true;
+
     }
 }
