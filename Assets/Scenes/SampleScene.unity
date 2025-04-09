@@ -6589,11 +6589,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 1285754326}
   _animationController: {fileID: 1285754330}
+  _character: {fileID: 1829831181}
   _walkSpeed: 1.5
   _runSpeed: 4
   _sprintSpeed: 6
   _mouseSensitivity: 600
   _jumpVelocity: 5
+  _characterRotationSmooth: 10
   _layerMaskJump:
     serializedVersion: 2
     m_Bits: 1
@@ -7160,7 +7162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3f3fdedb57f73bb4d94a4445de37548e, type: 3}
       propertyPath: m_Name
-      value: Idle
+      value: PlayerModel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

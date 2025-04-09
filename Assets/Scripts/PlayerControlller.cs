@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerControlller : MonoBehaviour
 {
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private AnimationController _animationController;
+    [SerializeField] private Transform _character;
     [SerializeField] private float _walkSpeed = 1.5f;
     [SerializeField] private float _runSpeed = 4f;
     [SerializeField] private float _sprintSpeed = 6f;
     [SerializeField] private float _mouseSensitivity = 10;
     [SerializeField] private float _jumpVelocity = 3f;
+    [SerializeField] private float _characterRotationSmooth = 10f;
     [SerializeField] private LayerMask _layerMaskJump;
 
     private float _moveHorizontal;
@@ -36,6 +39,7 @@ public class PlayerControlller : MonoBehaviour
     {
         GetInput();
         Gravity();
+        RotateCharachter();
         Move();
     }
 
@@ -51,10 +55,10 @@ public class PlayerControlller : MonoBehaviour
     {
         _moveHorizontal = Input.GetAxis("Horizontal");
         _moveVertical = Input.GetAxis("Vertical");
+        _mouseHorizontal = Input.GetAxis("Mouse X");
         _isJumping = Input.GetKeyDown(KeyCode.Space);
         _isWalking = Input.GetKey(KeyCode.LeftAlt);
         _isSprinting = Input.GetKey(KeyCode.LeftShift);
-        _mouseHorizontal = Input.GetAxis("Mouse X");
     }
 
     private void Move()
@@ -69,14 +73,24 @@ public class PlayerControlller : MonoBehaviour
         {
             speed = _sprintSpeed;
         }
-
-        transform.Rotate(0, _mouseHorizontal * Time.deltaTime * _mouseSensitivity, 0);
+               
         Vector3 move = (transform.forward * _moveVertical + transform.right * _moveHorizontal) * speed;
 
         _animationController.Move(move.magnitude);
 
         move.y = _velocity;
         _characterController.Move(move * Time.deltaTime);
+    }
+
+    private void RotateCharachter()
+    {
+        transform.Rotate(0, _mouseHorizontal * Time.deltaTime * _mouseSensitivity, 0);
+        Vector3 dir = _characterController.velocity.normalized;
+        dir.y = 0;
+        if (_characterController.velocity.sqrMagnitude > 0.01f)
+        {
+            _character.rotation = Quaternion.Slerp(_character.rotation, Quaternion.LookRotation(dir, Vector3.up), Time.deltaTime * _characterRotationSmooth);
+        }
     }
 
     private void Gravity()
