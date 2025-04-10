@@ -21,6 +21,7 @@ public class PlayerControlller : MonoBehaviour
     private bool _isJumping;
     private bool _isWalking;
     private bool _isSprinting;
+    private bool _isAttacking;
     private float _velocity;
     private float _mouseHorizontal;
     private bool _groundCheck;
@@ -41,6 +42,7 @@ public class PlayerControlller : MonoBehaviour
         Gravity();
         RotateCharachter();
         Move();
+        Attack();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,6 +61,7 @@ public class PlayerControlller : MonoBehaviour
         _isJumping = Input.GetKeyDown(KeyCode.Space);
         _isWalking = Input.GetKey(KeyCode.LeftAlt);
         _isSprinting = Input.GetKey(KeyCode.LeftShift);
+        _isAttacking = Input.GetMouseButtonDown(0);
     }
 
     private void Move()
@@ -80,6 +83,14 @@ public class PlayerControlller : MonoBehaviour
 
         move.y = _velocity;
         _characterController.Move(move * Time.deltaTime);
+    }
+
+    private void Attack()
+    {
+        if (_isAttacking)
+        {
+            _animationController.PlayAttack();
+        }
     }
 
     private void RotateCharachter()
