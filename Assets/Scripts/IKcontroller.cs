@@ -21,7 +21,7 @@ public class IKcontroller : MonoBehaviour
         {
             _stareTarget = target;
         }
-        else if (_stareTarget == null && _stareTarget.Equals(target))
+        else if (_stareTarget == null || _stareTarget.Equals(target))
         {
             _stareTarget = null;
         }

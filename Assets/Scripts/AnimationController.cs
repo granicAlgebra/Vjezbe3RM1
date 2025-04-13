@@ -45,9 +45,9 @@ public class AnimationController : MonoBehaviour
     {
         _isAttacking = true;
 
-        yield return StartCoroutine(BlendLayerWeight(1, 1f, _blendDuration));
-
         _animator.SetTrigger("Attack");
+
+        yield return StartCoroutine(BlendLayerWeight(1, 1f, _blendDuration));
 
         AnimatorStateInfo stateInfo;
         do
