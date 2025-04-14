@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerControlller : MonoBehaviour
 {
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private AnimationController _animationController;
+    [SerializeField] private CinemachineVirtualCamera _cinemachineAimCamera;
+    [SerializeField] private GameObject _aimTexture;
     [SerializeField] private Transform _character;
     [SerializeField] private float _walkSpeed = 1.5f;
     [SerializeField] private float _runSpeed = 4f;
@@ -22,6 +25,7 @@ public class PlayerControlller : MonoBehaviour
     private bool _isWalking;
     private bool _isSprinting;
     private bool _isAttacking;
+    private bool _isAiming;
     private float _velocity;
     private float _mouseHorizontal;
     private bool _groundCheck;
@@ -39,6 +43,7 @@ public class PlayerControlller : MonoBehaviour
     void Update()
     {
         GetInput();
+        Aim();
         Gravity();
         RotateCharachter();
         Move();
@@ -62,6 +67,7 @@ public class PlayerControlller : MonoBehaviour
         _isWalking = Input.GetKey(KeyCode.LeftAlt);
         _isSprinting = Input.GetKey(KeyCode.LeftShift);
         _isAttacking = Input.GetMouseButtonDown(0);
+        _isAiming = Input.GetMouseButton(1);
     }
 
     private void Move()
@@ -83,6 +89,20 @@ public class PlayerControlller : MonoBehaviour
 
         move.y = _velocity;
         _characterController.Move(move * Time.deltaTime);
+    }
+
+    private void Aim()
+    {
+        if (_isAiming)
+        {
+            _cinemachineAimCamera.Priority = 11;
+        }
+        else
+        {
+            _cinemachineAimCamera.Priority = 0;
+        }
+
+        _aimTexture.SetActive(_isAiming);
     }
 
     private void Attack()

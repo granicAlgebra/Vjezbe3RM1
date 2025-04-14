@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -10,6 +11,8 @@ public class AnimationController : MonoBehaviour
     private Animator _animator;
 
     private bool _isAttacking;
+
+    private Coroutine _attack;
 
     void Start()
     {
@@ -37,7 +40,7 @@ public class AnimationController : MonoBehaviour
         {
             return;
         }
-        StartCoroutine(HandleAttack());
+        _attack = StartCoroutine(HandleAttack());
 
     }
 
@@ -77,5 +80,16 @@ public class AnimationController : MonoBehaviour
         }
 
         _animator.SetLayerWeight(layerIndex, targetWeight);
+    }
+
+    internal void PlayDeath()
+    {
+        _animator.SetTrigger("Death");
+
+        if (_attack != null)
+        {
+            StopCoroutine(_attack);
+            StartCoroutine(BlendLayerWeight(1, 0f, _blendDuration));
+        }
     }
 }
